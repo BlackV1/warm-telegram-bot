@@ -4,7 +4,7 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 # === НАСТРОЙКИ ===
-TOKEN = 8220445421:AAFj30coFLuk330NJ74KywUqPttW12wXPlc
+TOKEN = "8220445421:AAFj30coFLuk330NJ74KywUqPttW12wXPlc"
 MEETING_DATE = date(2026, 6, 14)
 
 SOFT_MESSAGES = [
@@ -51,3 +51,4 @@ app.add_handler(CommandHandler("days", days))
 app.add_handler(CommandHandler("missyou", missyou))
 
 app.run_polling()
+
