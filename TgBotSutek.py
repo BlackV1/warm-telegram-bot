@@ -25,6 +25,13 @@ SOFT_MESSAGES = [
     "Я рядом, Лид💛"
 ]
 
+STICKERS = [
+    "CAACAgIAAxkBAAFA3sxpbPdIrFWG3W8CltSe9rYiYjoxKgACjQEAAiteUwvXatazNkylHDgE",
+    "CAACAgQAAxkBAAFA3tRpbPgcppxpM90emOsxcR2jFekCMQAC2BQAAuiWMFKeUXzNBIgNGzgE",
+    "CAACAgQAAxkBAAFA3thpbPg7bxPkaUzYrAqdQQm33VSNsAACXxIAAlnsCFLWYwMTNjjlYTgE",
+    "CAACAgQAAxkBAAFA3uBpbPheNedk9o4YdtbRsvtilNtCSwACgRMAAt_I2VOKmTHOdbqtTTgE",
+]
+
 # === КОМАНДЫ ===
 async def days(update: Update, context: ContextTypes.DEFAULT_TYPE):
     today = date.today()
@@ -49,7 +56,11 @@ async def days(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(text)
 
 async def missyou(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(random.choice(SOFT_MESSAGES))
+    sticker = random.choice(STICKERS)
+    message = random.choice(SOFT_MESSAGES)
+
+    await update.message.reply_sticker(sticker)
+    await update.message.reply_text(message)
 
 # === ЗАПУСК ===
 app = ApplicationBuilder().token(TOKEN).build()
@@ -58,5 +69,6 @@ app.add_handler(CommandHandler("days", days))
 app.add_handler(CommandHandler("missyou", missyou))
 
 app.run_polling()
+
 
 
