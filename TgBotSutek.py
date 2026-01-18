@@ -62,6 +62,12 @@ async def missyou(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_sticker(sticker)
     await update.message.reply_text(message)
 
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "Я здесь, солнце и я тебя люблю💛"
+    )
+
+
 # === ЗАПУСК ===
 app = ApplicationBuilder().token(TOKEN).build()
 app.add_handler(CommandHandler("start", start))
@@ -69,6 +75,7 @@ app.add_handler(CommandHandler("days", days))
 app.add_handler(CommandHandler("missyou", missyou))
 
 app.run_polling()
+
 
 
 
