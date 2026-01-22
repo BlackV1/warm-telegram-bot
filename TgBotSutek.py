@@ -18,12 +18,24 @@ SOFT_MESSAGES = [
     "-Но ты же сам написал...\n"
     "-Всёёё, не могу говорить, тут слишком красиво",
     "Ты милаааааааааашечка💛",
-    "Я слышу хруст твоих суставов и огонь в твоих глазах",
-    "Я верю в тебя так же спокойно, как дышу",
+    "Я слышу хруст твоих суставов и огонь в твоих глазааааах",
+    "Я верю в тебя!",
     "Я скучаю по тебе... Очень...",
     "Ты — мой дом",
-    "14 июня станет нашим днём",
-    "Я рядом, Лид💛"
+    "Я ЛЮБЛЮЮЮЮ ТЕБЯ ДО СЛЛЕЕЕЕЕЕЗ",
+    "Я рядом, Лид💛",
+    "Ты - нафталин моих мехов, конъюнктивит моих очей🦈",
+    "СООООЛНЫШКООООООООО🥹",
+    "Что, милое сообщение ожидала увидеть? Лох!\n\n\n\n\n\n\n\"
+    "Ну лааааааааааааадно, так уж и быть)) Нажми еще раз))",
+    "Ну фто, малыфка, к тебе или ко мне?",
+    "Где твои губы, когда они мне так нужны..",
+    "Желаю всем годовой запас кофе!!!",
+    "Обожаю тебя🫂",
+    "Ты лучшая!💛",
+    "Думаю о тебе...💛",
+    "Расцеловать тебя хочется!!!",
+    "Прилечь бы сейчас с тобой в обнимку"
 ]
 
 STICKERS = [
@@ -31,6 +43,13 @@ STICKERS = [
     "CAACAgQAAxkBAAFA3tRpbPgcppxpM90emOsxcR2jFekCMQAC2BQAAuiWMFKeUXzNBIgNGzgE",
     "CAACAgQAAxkBAAFA3thpbPg7bxPkaUzYrAqdQQm33VSNsAACXxIAAlnsCFLWYwMTNjjlYTgE",
     "CAACAgQAAxkBAAFA3uBpbPheNedk9o4YdtbRsvtilNtCSwACgRMAAt_I2VOKmTHOdbqtTTgE",
+    "CAACAgIAAxkBAAFBCihpcdPeCq48U9S3ypuPuqi7CgABHbAAAm8_AAKEGbBKjh9-eEJZaZo4BA",
+    "CAACAgIAAxkBAAFBCippcdPooK4_hp0vUvuFXlOs1U-mHgACHCUAAm3FyUl96nT8kts0zzgE",
+    "CAACAgIAAxkBAAFBCixpcdPyyV9S3s3qVbJnBTfJSbYnOQACpBsAAtsS0EkLKsSm2aNDqTgE",
+    "CAACAgIAAxkBAAFBCi5pcdP2Cn39MN1o26T9PahHaNW4TgACdx4AApRuyEkjwf63ds1DyTgE",
+    "CAACAgIAAxkBAAFBCjBpcdP5YO_2yyzZbcSCsPJVzD6ZwQACGyMAAl5J0UmN4pHGYMho6DgE",
+    "CAACAgIAAxkBAAFBCjNpcdQOCq3UJadrV_S70z7Nr5aJdgAC0yAAAkAtyElSD1F7REosZDgE",
+    "CAACAgIAAxkBAAFBCjVpcdQYeYavITK5NOlMpsPVkkBC6AACViMAAsB10ElzoZn_OXdpijgE"
 ]
 
 def persistent_keyboard():
@@ -119,3 +138,4 @@ app.add_handler(CommandHandler("missyou", missyou))
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, text_buttons))
 
 app.run_polling()
+
