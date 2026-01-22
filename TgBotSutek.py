@@ -2,6 +2,8 @@ import random
 from datetime import date
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+
 
 # === НАСТРОЙКИ ===
 TOKEN = "8220445421:AAFj30coFLuk330NJ74KywUqPttW12wXPlc"
@@ -31,6 +33,17 @@ STICKERS = [
     "CAACAgQAAxkBAAFA3thpbPg7bxPkaUzYrAqdQQm33VSNsAACXxIAAlnsCFLWYwMTNjjlYTgE",
     "CAACAgQAAxkBAAFA3uBpbPheNedk9o4YdtbRsvtilNtCSwACgRMAAt_I2VOKmTHOdbqtTTgE",
 ]
+def main_keyboard():
+    keyboard = [
+        [
+            InlineKeyboardButton("❤️ Мне тебя не хватает", callback_data="missyou"),
+        ],
+        [
+            InlineKeyboardButton("⏳ Сколько осталось", callback_data="days"),
+        ],
+    ]
+    return InlineKeyboardMarkup(keyboard)
+
 
 # === КОМАНДЫ ===
 async def days(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -51,7 +64,7 @@ async def days(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "14.06.2026"
             )
         else:
-            text = "Мы уже вместе💛 "
+            text = "Мы уже вместе💛"
 
     await update.message.reply_text(text)
 
@@ -64,17 +77,53 @@ async def missyou(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "Я здесь, солнце и я тебя люблю💛"
+        "Я здесь, солнце и я тебя люблю💛",
+        reply_markup=main_keyboard()
     )
+
+async def buttons(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+
+    if query.data == "missyou":
+        sticker = random.choice(STICKERS)
+        message = random.choice(SOFT_MESSAGES)
+        await query.message.reply_sticker(sticker)
+        await query.message.reply_text(message)
+
+    elif query.data == "days":
+        today = date.today()
+
+        if today < DEPARTURE_DATE:
+            remaining = (MEETING_DATE - today).days
+            text = (
+                "Хээээй! Я ещё никуда не улетел, солнце :)🤍\n"
+                "Мы всё ещё рядом💛"
+            )
+        else:
+            remaining = (MEETING_DATE - today).days
+            if remaining >= 0:
+                text = (
+                    f"До нашей встречи осталось дней: {remaining} 🤍\n"
+                    "Это на один день меньше, чем вчера, солнышко :)\n"
+                    "14.06.2026"
+                )
+            else:
+                text = "Мы уже вместе💛"
+
+        await query.message.reply_text(text)
 
 
 # === ЗАПУСК ===
+from telegram.ext import CallbackQueryHandler
 app = ApplicationBuilder().token(TOKEN).build()
 app.add_handler(CommandHandler("start", start))
 app.add_handler(CommandHandler("days", days))
 app.add_handler(CommandHandler("missyou", missyou))
+app.add_handler(CallbackQueryHandler(buttons))
 
 app.run_polling()
+
 
 
 
