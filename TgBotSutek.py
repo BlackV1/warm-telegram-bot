@@ -180,9 +180,9 @@ app.add_handler(CommandHandler("missyou", missyou))
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, text_buttons))
 
 schedule_weekly_messages(app.job_queue)
-app.job_queue.run_once(auto_message, when=60)
 
 app.run_polling()
+
 
 
 
