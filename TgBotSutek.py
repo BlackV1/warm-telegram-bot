@@ -8,6 +8,7 @@ from telegram import ReplyKeyboardMarkup
 TOKEN = "8220445421:AAFj30coFLuk330NJ74KywUqPttW12wXPlc"
 MEETING_DATE = date(2026, 6, 14)
 DEPARTURE_DATE = date(2026, 2, 15)
+MY_CHAT_ID = 1194574842
 
 SOFT_MESSAGES = [
     "А я тебя люблю, прелесть!",
@@ -54,7 +55,7 @@ STICKERS = [
 
 def persistent_keyboard():
     keyboard = [
-        ["Мне тебя не хватает...💛", "⏳ Сколько осталось"]
+        ["Мне тебя не хватает...💛", "⏳ Сколько осталось", "📞 Хочу, чтобы ты позвонил"]
     ]
     return ReplyKeyboardMarkup(
         keyboard,
@@ -108,6 +109,21 @@ async def text_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_sticker(sticker)
         await update.message.reply_text(message)
 
+    elif text == "📞 Хочу, чтобы ты позвонил":
+
+    # Ответ ей
+    await update.message.reply_text(
+        "Я получил сигнал, моя малышка Лика💛\n"
+        "Постараюсь позвонить, как только смогу :)"
+    )
+
+    # Уведомление тебе
+    await context.bot.send_message(
+        chat_id=MY_CHAT_ID,
+        text="Она хочет, чтобы ты позвонил 🤍"
+    )
+
+
     elif text == "⏳ Сколько осталось":
         today = date.today()
 
@@ -138,6 +154,7 @@ app.add_handler(CommandHandler("missyou", missyou))
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, text_buttons))
 
 app.run_polling()
+
 
 
 
