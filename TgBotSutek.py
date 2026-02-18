@@ -9,6 +9,7 @@ TOKEN = "8220445421:AAFj30coFLuk330NJ74KywUqPttW12wXPlc"
 MEETING_DATE = date(2026, 6, 14)
 DEPARTURE_DATE = date(2026, 2, 15)
 MY_CHAT_ID = 1194574842
+LIKA_CHAT_ID = 1289384192
 
 SOFT_MESSAGES = [
     "А я тебя люблю, прелесть!",
@@ -63,7 +64,35 @@ def persistent_keyboard():
         one_time_keyboard=False
     )
 
+def schedule_weekly_messages(job_queue):
+
+    SECONDS_IN_WEEK = 7 * 24 * 60 * 60
+
+    for _ in range(3):  # 3 сообщения в неделю
+        day_offset = random.randint(0, 6)
+        hour = random.randint(8, 23)
+        minute = random.randint(0, 59)
+
+        first_time = (
+            day_offset * 24 * 60 * 60 +
+            hour * 60 * 60 +
+            minute * 60
+        )
+
+        job_queue.run_repeating(
+            auto_message,
+            interval=SECONDS_IN_WEEK,
+            first=first_time
+        )
+
 # === КОМАНДЫ ===
+async def auto_message(context: ContextTypes.DEFAULT_TYPE):
+    sticker = random.choice(STICKERS)
+    message = random.choice(SOFT_MESSAGES)
+
+    await context.bot.send_sticker(chat_id=LIKA_CHAT_ID, sticker=sticker)
+    await context.bot.send_message(chat_id=LIKA_CHAT_ID, text=message)
+
 async def days(update: Update, context: ContextTypes.DEFAULT_TYPE):
     today = date.today()
 
@@ -150,7 +179,11 @@ app.add_handler(CommandHandler("days", days))
 app.add_handler(CommandHandler("missyou", missyou))
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, text_buttons))
 
+schedule_weekly_messages(app.job_queue)
+app.job_queue.run_once(auto_message, when=60)
+
 app.run_polling()
+
 
 
 
