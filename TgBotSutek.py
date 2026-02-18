@@ -126,23 +126,21 @@ async def text_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "14.06.2026"
             )
 
-    elif text == "📞 Хочу, чтобы ты позвонил":
-
-    # Ответ ей
-    await update.message.reply_text(
-        "Я получил сигнал, моя малышка Лика💛\n"
-        "Постараюсь позвонить, как только смогу :)"
-    )
-
-    # Уведомление тебе
-    await context.bot.send_message(
-        chat_id=MY_CHAT_ID,
-        text="Она хочет, чтобы ты позвонил 🤍"
-    )
-
         await update.message.reply_text(reply)
 
+    elif text == "📞 Хочу, чтобы ты позвонил":
 
+        # Ответ ей
+        await update.message.reply_text(
+            "Я получил сигнал, моя малышка Лика💛\n"
+            "Постараюсь позвонить, как только смогу :)"
+        )
+
+        # Уведомление тебе
+        await context.bot.send_message(
+            chat_id=MY_CHAT_ID,
+            text="Сутек, Лика хочет, чтобы ты позвонил 🤍"
+        )
 
 # === ЗАПУСК ===
 from telegram.ext import MessageHandler, filters
@@ -153,6 +151,7 @@ app.add_handler(CommandHandler("missyou", missyou))
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, text_buttons))
 
 app.run_polling()
+
 
 
 
