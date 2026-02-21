@@ -10,6 +10,9 @@ MEETING_DATE = date(2026, 6, 14)
 DEPARTURE_DATE = date(2026, 2, 15)
 MY_CHAT_ID = 1194574842
 LIKA_CHAT_ID = 1289384192
+HALF_SENT = False
+MONTH_SENT = False
+WEEK_SENT = False
 
 SOFT_MESSAGES = [
     "А я тебя люблю, прелесть!",
@@ -153,6 +156,52 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup=persistent_keyboard()
     )
 
+async def special_milestones(context: ContextTypes.DEFAULT_TYPE):
+    global HALF_SENT, MONTH_SENT, WEEK_SENT
+
+    today = date.today()
+    remaining = (MEETING_DATE - today).days
+
+    if remaining <= 0:
+        return
+
+    total_days = (MEETING_DATE - DEPARTURE_DATE).days
+
+    # 💛 Половина пути
+    if not HALF_SENT and remaining <= total_days // 2:
+        HALF_SENT = True
+
+        text = (
+            "💛УРАААААААААААААААААААА Мы прошли половину путиииииии\n"
+            "Теперь мы еще ближе🤍 Просто вспомни как это ощущалось в самом начале. Я, например, думал, что это ну просто невозможно"
+        )
+
+        await context.bot.send_message(chat_id=LIKA_CHAT_ID, text=text)
+        await context.bot.send_message(chat_id=MY_CHAT_ID, text=text)
+
+    # 🌙 Последний месяц
+    if not MONTH_SENT and remaining <= 30:
+        MONTH_SENT = True
+
+        text = (
+            "🌙 УРААААААААААААААААААА Начался последний месяц до нашей встречи 🤍\n"
+            "Скоро мы будем рядом"
+        )
+
+        await context.bot.send_message(chat_id=LIKA_CHAT_ID, text=text)
+        await context.bot.send_message(chat_id=MY_CHAT_ID, text=text)
+
+    # ✨ Последняя неделя
+    if not WEEK_SENT and remaining <= 7:
+        WEEK_SENT = True
+
+        text = (
+            "✨СООООЛНЫШКООООООООООООО, Финальная неделя\n"
+            "Скоро мы будем рядом🤍"
+        )
+
+        await context.bot.send_message(chat_id=LIKA_CHAT_ID, text=text)
+        await context.bot.send_message(chat_id=MY_CHAT_ID, text=text)
 
 async def text_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
@@ -199,7 +248,14 @@ app.job_queue.run_repeating(
     first=10
 )
 
+app.job_queue.run_repeating(
+    special_milestones,
+    interval=24 * 60 * 60,
+    first=20
+)
+
 app.run_polling()
+
 
 
 
