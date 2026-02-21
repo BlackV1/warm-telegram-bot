@@ -14,6 +14,30 @@ HALF_SENT = False
 MONTH_SENT = False
 WEEK_SENT = False
 
+unused_memories = []
+
+MEMORY_PHOTOS = [
+    ("AgACAgIAAxkBAAFC6JNpmZN2MBCFQwHInXjYkjSkJZsQQQACKhdrG1XdyEj5KU_zYpAmcgEAAwIAA3MAAzoE", "Ты себе на этом фото не очень нравишься, но я его так люблю💛"),
+    ("AgACAgIAAxkBAAFC6J9pmZPwAxW7bW8rByAHqrxOoNN5hAACORdrG1XdyEhM6YLWInyOCwEAAwIAA3MAAzoE", "Ооо, смотри! А это мы в Астане💛"),
+    ("AgACAgIAAxkBAAFC6KhpmZRgM8LZKTsVvaE24TDEJu8zPAACQRdrG1XdyEhsmLm4jcAWcAEAAwIAA3MAAzoE", "Теплый осенний день, когда мы с тобой пошли на терренкур и взяли поесть и термос💛"),
+    ("AgACAgIAAxkBAAFC6LVpmZS3sjbe4B6Js1H61NNFl7SX-AACSRdrG1XdyEja-4HXLbtiVwEAAwIAA3MAAzoE", "Твоя любимая фотка💛 Новый год в Павлодаре :)"),
+    ("AgACAgIAAxkBAAFC6L1pmZUI9r3Ndsxm7VphYQhwbrWakgACTRdrG1XdyEjcX_JRWjg6NwEAAwIAA3MAAzoE", "Моя умничка🥹🥹🥹"),
+    ("AgACAgIAAxkBAAFC6MNpmZVxqCUylfDJ-tp86LCMF2ZycgACVRdrG1XdyEg2kGkEc-QBmQEAAwIAA3MAAzoE", "Оп, а это мой коллаж, помнишь его?))))"),
+    ("AgACAgIAAxkBAAFC6NVpmZXEqDrKaZv0LTn83RIDaJrplwACVxdrG1XdyEgvkDVilRMtBAEAAwIAA3MAAzoE", "А это мы с тобой на фоне крутого Султана Сутека :) Интересно, мой постер там еще стоит?)"),
+    ("AgACAgIAAxkBAAFC6N5pmZZG0BqKGzeq3oaVvrqHv6Eo2AACWhdrG1XdyEijFMzLz9fC4QEAAwIAA3MAAzoE", "АХХАХАХАХАХХАХА, ну это без комментариев"),
+    ("AgACAgIAAxkBAAFC6OhpmZaWDLjpjqQul2Y2Shu5WjMargACXhdrG1XdyEhue1qQEyTEAQEAAwIAA3MAAzoE", "Повторим летом?)))))"),
+    ("AgACAgIAAxkBAAFC6PZpmZbR4y64hRDwwLVnYXwdU7cf0wACXxdrG1XdyEjnDlbKl8lK0wEAAwIAA3MAAzoE", "Смотри!!! Они тогда еще не знали, что начнут встречаться🤭"),
+    ("AgACAgIAAxkBAAFC6P5pmZc_-zxBMs2jlqKfNheW0vHoRAACYhdrG1XdyEgsG5K0JPLvAwEAAwIAA3MAAzoE", "А тут папа по твоим глазам понял, что ты в меня влюблена🤭"),
+    ("AgACAgIAAxkBAAFC6QJpmZfR3ZT2ndNDvPnMwnrk40SIvgACaBdrG1XdyEiKhevahNPRFQEAAwIAA3MAAzoE", "Одна из моих любимых фотографий🥹💛"),
+    ("AgACAgIAAxkBAAFC6RBpmZh13mfIFAGrSM6p7DYKa8RyKwACbxdrG1XdyEgyJnzA68dIBwEAAwIAA3MAAzoE", "Ооооу маааай"),
+    ("AgACAgIAAxkBAAFC6RRpmZjYgt7WIgsc8eAnlhZCX3N2FQACdBdrG1XdyEgjFyVb-ur2JQEAAwIAA3MAAzoE", "СУППППППЕР КАЧКИИИИИИИ"),
+    ("AgACAgIAAxkBAAFC6RhpmZkpfmwffTPM0d-I1vL71tsybQACdhdrG1XdyEginChQQlLQ-AEAAwIAA3MAAzoE", "💛💛💛"),
+    ("AgACAgIAAxkBAAFC6RppmZlZz193t85HBtgNVwoinOafuQACeBdrG1XdyEgY-OnhhJtxJQEAAwIAA3MAAzoE", "Держимся за ручки🥹🥹🥹"),
+    ("AgACAgIAAxkBAAFC6RxpmZmG2EbzZ4YS_Dcr9kUIZNkpjwACeRdrG1XdyEhTtsJ5pCPmKQEAAwIAA3MAAzoE", "ЛИКА позирует на фоне Астаны, лады и трактора, который еще не проехал на фоне"),
+    ("AgACAgIAAxkBAAFC6SBpmZm-laje00vgVxumgbN46YJr7AACehdrG1XdyEiHH9IoXL3Q4gEAAwIAA3MAAzoE", "Еще один теплый день💛"),
+    ("AgACAgIAAxkBAAFC6ShpmZnvrtH2tYTMpvBYfWHuGEdYTAACexdrG1XdyEgTCuMIJA1LygEAAwIAA3MAAzoE", "Дваа очкарика💛🥸"),
+]
+
 SOFT_MESSAGES = [
     "А я тебя люблю, прелесть!",
     "Скучаю по теплу твоего тела...",
@@ -203,6 +227,30 @@ async def special_milestones(context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(chat_id=LIKA_CHAT_ID, text=text)
         await context.bot.send_message(chat_id=MY_CHAT_ID, text=text)
 
+async def weekly_memory(context):
+    global unused_memories
+
+    # Если список закончился — начинаем заново
+    if not unused_memories:
+        unused_memories = MEMORY_PHOTOS.copy()
+        random.shuffle(unused_memories)
+
+    photo_id, caption = unused_memories.pop()
+
+    # 📩 Ей
+    await context.bot.send_photo(
+        chat_id=LIKA_CHAT_ID,
+        photo=photo_id,
+        caption=caption
+    )
+
+    # 📩 Тебе
+    await context.bot.send_photo(
+        chat_id=MY_CHAT_ID,
+        photo=photo_id,
+        caption=caption
+    )
+
 async def text_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
 
@@ -249,12 +297,19 @@ app.job_queue.run_repeating(
 )
 
 app.job_queue.run_repeating(
+    weekly_memory,
+    interval=7 * 24 * 60 * 60,
+    first=10
+)
+
+app.job_queue.run_repeating(
     special_milestones,
     interval=24 * 60 * 60,
     first=20
 )
 
 app.run_polling()
+
 
 
 
