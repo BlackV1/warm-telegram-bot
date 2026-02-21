@@ -37,7 +37,11 @@ SOFT_MESSAGES = [
     "Ты лучшая!💛",
     "Думаю о тебе...💛",
     "Расцеловать тебя хочется!!!",
-    "Прилечь бы сейчас с тобой в обнимку"
+    "Прилечь бы сейчас с тобой в обнимку",
+    "Мы друг у друга в приоритете, любимка :3",
+    "Я всегда думаю о тебе, как Форрест думает о Дженни",
+    "Представь, как мы будем обниматься в аэропорту🫂❤️‍🩹",
+    "Люби меня люби, жарким огнем, ночью и днем, сердце сжигая.."
 ]
 
 STICKERS = [
@@ -53,6 +57,15 @@ STICKERS = [
     "CAACAgIAAxkBAAFBCjNpcdQOCq3UJadrV_S70z7Nr5aJdgAC0yAAAkAtyElSD1F7REosZDgE",
     "CAACAgIAAxkBAAFBCjVpcdQYeYavITK5NOlMpsPVkkBC6AACViMAAsB10ElzoZn_OXdpijgE"
 ]
+
+def format_remaining_days(days):
+    weeks = days // 7
+    remaining_days = days % 7
+
+    if weeks > 0:
+        return f"{weeks} недель и {remaining_days} дней"
+    else:
+        return f"{remaining_days} дней"
 
 def persistent_keyboard():
     keyboard = [
@@ -95,25 +108,37 @@ async def auto_message(context: ContextTypes.DEFAULT_TYPE):
 
 async def days(update: Update, context: ContextTypes.DEFAULT_TYPE):
     today = date.today()
+    remaining = (MEETING_DATE - today).days
 
-    if today < DEPARTURE_DATE:
-        remaining = (MEETING_DATE - today).days
-        text = (
-            "Хээээй! Я ещё никуда не улетел, солнце :)🤍\n"
-            "Мы всё ещё рядом💛"
-        )
-    else:
-        remaining = (MEETING_DATE - today).days
-        if remaining >= 0:
-            text = (
-                f"До нашей встречи осталось дней: {remaining} 🤍\n"
-                "Это на один день меньше, чем вчера, солнышко :)\n"
-                "14.06.2026"
-            )
-        else:
-            text = "Мы уже вместе💛"
+    # если дата уже прошла — показываем 0
+    if remaining < 0:
+        remaining = 0
+
+    time_text = format_remaining_days(remaining)
+
+    text = (
+        f"До нашей встречи осталось:{time_text}🤍\n"
+        "Мы на шаг ближе к нашей встрече🥹"
+    )
 
     await update.message.reply_text(text)
+
+async def milestone_message(context: ContextTypes.DEFAULT_TYPE):
+    today = date.today()
+    remaining = (MEETING_DATE - today).days
+
+    if remaining > 0 and remaining % 10 == 0:
+
+        message_text = (
+            "💛 СООООЛНЫШКООООО, Ещё один рубеж пройден\n"
+            f"До нашей встречи осталось {remaining} дней 🤍"
+        )
+
+        # ей
+        await context.bot.send_message(chat_id=LIKA_CHAT_ID, text=message_text)
+
+        # тебе
+        await context.bot.send_message(chat_id=MY_CHAT_ID, text=message_text)
 
 async def missyou(update: Update, context: ContextTypes.DEFAULT_TYPE):
     sticker = random.choice(STICKERS)
@@ -139,21 +164,8 @@ async def text_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(message)
 
     elif text == "⏳ Сколько осталось":
-        today = date.today()
-
-        if today < DEPARTURE_DATE:
-            remaining = (MEETING_DATE - today).days
-            reply = (
-                "Хээээй! Я ещё никуда не улетел, солнце :)🤍\n"
-                "Мы всё ещё рядом💛"
-            )
-        else:
-            remaining = (MEETING_DATE - today).days
-            reply = (
-                f"До нашей встречи осталось дней: {remaining} 🤍\n"
-                "Это на один день меньше, чем вчера, солнышко :)\n"
-                "14.06.2026"
-            )
+        await update.message.chat.send_action("typing")
+        await days(update, context)
 
         await update.message.reply_text(reply)
 
@@ -181,7 +193,14 @@ app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, text_buttons))
 
 schedule_weekly_messages(app.job_queue)
 
+app.job_queue.run_repeating(
+    milestone_message,
+    interval=24 * 60 * 60,  # раз в сутки
+    first=10
+)
+
 app.run_polling()
+
 
 
 
