@@ -6,7 +6,7 @@ from telegram import ReplyKeyboardMarkup
 
 # === НАСТРОЙКИ ===
 TOKEN = "8220445421:AAFj30coFLuk330NJ74KywUqPttW12wXPlc"
-MEETING_DATE = date(2026, 6, 14)
+MEETING_DATE = date(2026, 6, 13)
 DEPARTURE_DATE = date(2026, 2, 15)
 MY_CHAT_ID = 1194574842
 LIKA_CHAT_ID = 1289384192
